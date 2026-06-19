@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/login_screen.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
   runApp(const BeafoxApp());
@@ -16,7 +16,7 @@ class BeafoxApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFEB8A26)),
       ),
-      home: const LoginScreen(),
+      home: const SplashScreen(),
     );
   }
 }

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'home_screen.dart';
+import 'registration_screen.dart';
+import 'welcome_back_screen.dart';
+import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -155,7 +157,9 @@ class _LoginScreenState extends State<LoginScreen> {
     return Align(
       alignment: Alignment.centerRight,
       child: TextButton(
-        onPressed: () {},
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const ForgotPasswordScreen()),
+        ),
         style: TextButton.styleFrom(
           padding: EdgeInsets.zero,
           minimumSize: Size.zero,
@@ -175,8 +179,8 @@ class _LoginScreenState extends State<LoginScreen> {
       height: 60,
       child: ElevatedButton(
         onPressed: () {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const HomeScreen()),
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => const WelcomeBackScreen()),
           );
         },
         style: ElevatedButton.styleFrom(
@@ -233,7 +237,11 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildSignUpLink() {
-    return RichText(
+    return GestureDetector(
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => const RegistrationScreen()),
+      ),
+      child: RichText(
       text: TextSpan(
         children: [
           TextSpan(
@@ -252,6 +260,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ],
+      ),
       ),
     );
   }

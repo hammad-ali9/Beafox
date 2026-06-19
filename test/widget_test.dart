@@ -1,30 +1,36 @@
-// This is a basic Flutter widget test.
+// Widget tests for the BeAFox app.
 //
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// The splash screen runs a repeating dot-spinner animation and a 3-second
+// auto-redirect timer, so tests advance time with explicit `pump` durations
+// rather than `pumpAndSettle` (which never settles while the spinner repeats).
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:beafox/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const BeafoxApp());
+  group('BeAFox', () {
+    testWidgets('launches on the branded splash screen', (tester) async {
+      await tester.pumpWidget(const BeafoxApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+      // The first frame shows the splash brand mark.
+      expect(find.text('BeAFox'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+      // Drain the splash auto-redirect timer so no timer is left pending.
+      await tester.pump(const Duration(seconds: 3));
+      await tester.pump(const Duration(milliseconds: 500));
+    });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    testWidgets('auto-advances from splash to onboarding', (tester) async {
+      await tester.pumpWidget(const BeafoxApp());
+
+      // Splash waits 3s, then routes to the welcome screen.
+      await tester.pump(const Duration(seconds: 3));
+      await tester.pump(); // build the route transition
+      await tester.pump(const Duration(milliseconds: 500)); // finish transition
+
+      // Welcome screen primary call-to-action.
+      expect(find.text('Get Started'), findsOneWidget);
+    });
   });
 }
